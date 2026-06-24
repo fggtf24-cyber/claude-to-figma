@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" font-family="Inter, Segoe UI, sans-serif">
+  <rect x="0" y="0" width="920" height="300" rx="16" fill="#0b1020"/>
+  <text x="32" y="44" fill="#fff" font-size="22" font-weight="800">Claude → Figma</text>
+  <text x="32" y="68" fill="#9aa4bf" font-size="14">HTML / дизайн из Claude → редактируемые слои Figma (аналог html.to.design)</text>
+
+  <!-- boxes -->
+  <g>
+    <rect x="32"  y="110" width="150" height="100" rx="14" fill="#131a30" stroke="#2a3350"/>
+    <text x="107" y="150" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">Claude</text>
+    <text x="107" y="172" fill="#8a93b2" font-size="12" text-anchor="middle">Desktop</text>
+    <text x="107" y="189" fill="#8a93b2" font-size="12" text-anchor="middle">или claude.ai</text>
+
+    <rect x="242" y="110" width="170" height="100" rx="14" fill="#131a30" stroke="#2a3350"/>
+    <text x="327" y="148" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">MCP-сервер</text>
+    <text x="327" y="170" fill="#8a93b2" font-size="12" text-anchor="middle">stdio / HTTP</text>
+    <text x="327" y="187" fill="#8a93b2" font-size="12" text-anchor="middle">import_html · import_url</text>
+
+    <rect x="472" y="110" width="170" height="100" rx="14" fill="#131a30" stroke="#2a3350"/>
+    <text x="557" y="148" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">WebSocket-мост</text>
+    <text x="557" y="170" fill="#4db5ff" font-size="12" text-anchor="middle">ws://localhost:3055</text>
+    <text x="557" y="187" fill="#8a93b2" font-size="12" text-anchor="middle">bridge.js</text>
+
+    <rect x="702" y="110" width="186" height="100" rx="14" fill="#0d99ff"/>
+    <text x="795" y="148" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">Плагин Figma</text>
+    <text x="795" y="170" fill="#dCEBFF" font-size="12" text-anchor="middle">HTML → дерево узлов</text>
+    <text x="795" y="187" fill="#dCEBFF" font-size="12" text-anchor="middle">фреймы · текст · шейпы · вектора</text>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#4db5ff" stroke-width="2" fill="none" marker-end="url(#a)">
+    <path d="M182 160 H242"/>
+    <path d="M412 160 H472"/>
+    <path d="M642 160 H702"/>
+  </g>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0 0 L7 3 L0 6 Z" fill="#4db5ff"/>
+    </marker>
+  </defs>
+
+  <text x="460" y="258" fill="#6E6E72" font-size="12" text-anchor="middle">Claude генерирует HTML → вызывает MCP-инструмент → мост передаёт в открытый плагин → плагин строит нативные слои</text>
+</svg>

@@ -10,3 +10,4 @@ npm-debug.log*
 # локальные секреты
 .env
 .env.*
+token.txt
