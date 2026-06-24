@@ -1,0 +1,19 @@
+# Fly.io конфиг для облачного relay. Деплой: cd server && fly launch (или fly deploy).
+app = "claude-to-figma-relay"
+primary_region = "ams"   # смени на ближайший регион (например fra, waw)
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # держим машину живой — relay хранит WebSocket-соединения плагинов.
+  # для экономии можно auto_stop_machines = true и min_machines_running = 0,
+  # но тогда при простое соединение рвётся и есть холодный старт.
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

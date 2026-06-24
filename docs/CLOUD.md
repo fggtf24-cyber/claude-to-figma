@@ -67,6 +67,31 @@ claude.ai / Claude Desktop                Figma (у пользователя)
 | `mcp-http-server.js` (StreamableHTTP) | то же, эндпоинт `/<код>/mcp` |
 | `ui.html` ws→localhost | ws→`wss://relay/plugin?room=КОД` + UI кода |
 
+## Деплой на Fly.io (Фаза 1 — готово к запуску)
+
+Relay уже собран: `server/cloud-relay.js` (+ `Dockerfile`, `fly.toml`, `.dockerignore`).
+Проверен локально сквозным тестом (MCP + маршрутизация по комнатам + изоляция).
+
+```powershell
+# 1. установить flyctl
+powershell -c "iwr https://fly.io/install.ps1 -useb | iex"
+# 2. вход/регистрация
+fly auth signup        # или: fly auth login
+# 3. из папки server (имя app в fly.toml глобально уникально — при конфликте поменяй)
+cd "C:\...\07 plugin figma\server"
+fly launch --no-deploy --copy-config --name claude-to-figma-relay
+fly deploy
+```
+После деплоя получишь хост вида `https://claude-to-figma-relay.fly.dev`.
+
+**Подключение (Фаза 1, без UI-кода):**
+- В плагине поле WebSocket → `wss://<хост>/plugin?room=<КОД>` (любой свой секретный КОД).
+- В claude.ai Connectors → `https://<хост>/<КОД>/mcp`.
+- КОД в обоих местах одинаковый — это и есть «комната».
+
+**Фаза 2 (UX):** перенести генерацию/хранение КОДА и кнопку «копировать URL коннектора»
+в сам плагин (`ui.html` + `figma.clientStorage`), чтобы не вводить адрес руками.
+
 ## План по фазам
 1. **Relay MVP**: переписать сервер на комнаты, задеплоить на Fly.io, проверить с pairing-кодом в URL. Плагин — на dev, ws на relay. (≈ день)
 2. **Плагин-UX**: генерация/хранение кода, кнопка «копировать URL коннектора», статус подключения. Публикация Only me для себя.
