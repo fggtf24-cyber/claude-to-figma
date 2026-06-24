@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; font-family: Inter, system-ui, sans-serif; }
+  body { width: 1440px; background: #0b1020; color: #fff; }
+  .hero { padding: 96px 120px; display: flex; flex-direction: column; gap: 24px; }
+  .badge { align-self: flex-start; padding: 6px 14px; border-radius: 999px;
+           background: rgba(13,153,255,.15); color: #4db5ff; font-size: 14px; font-weight: 600; }
+  h1 { font-size: 64px; font-weight: 800; line-height: 72px; max-width: 760px; letter-spacing: -1px; }
+  p  { font-size: 20px; color: #9aa4bf; max-width: 560px; line-height: 30px; }
+  .cta { display: flex; gap: 16px; margin-top: 16px; }
+  .btn { padding: 16px 28px; border-radius: 12px; font-size: 16px; font-weight: 600; }
+  .btn.primary { background: #0d99ff; color: #fff; }
+  .btn.ghost   { background: transparent; color: #fff; border: 1px solid #2a3350; }
+  .cards { display: flex; gap: 24px; padding: 0 120px 96px; }
+  .card { flex: 1; padding: 32px; border-radius: 20px; background: #131a30; border: 1px solid #20294a; }
+  .card h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .card span { color: #8a93b2; font-size: 15px; line-height: 24px; }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="badge">Claude → Figma</div>
+    <h1>Переноси дизайн из Claude прямо в Figma</h1>
+    <p>HTML превращается в редактируемые слои за пару секунд — фреймы, текст и картинки.</p>
+    <div class="cta">
+      <div class="btn primary">Начать бесплатно</div>
+      <div class="btn ghost">Документация</div>
+    </div>
+  </section>
+  <section class="cards">
+    <div class="card"><h3>Пиксель-в-пиксель</h3><span>Геометрия берётся из реального layout браузера.</span></div>
+    <div class="card"><h3>Редактируемо</h3><span>Не картинка, а настоящие слои Figma.</span></div>
+    <div class="card"><h3>Через MCP</h3><span>Claude сам отправляет дизайн в открытый плагин.</span></div>
+  </section>
+</body>
+</html>
