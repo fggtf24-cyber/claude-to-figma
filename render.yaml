@@ -1,0 +1,15 @@
+# Render Blueprint для облачного relay (free tier, без банковской карты).
+# Деплой: render.com → New → Blueprint → выбрать этот репозиторий → Apply.
+services:
+  - type: web
+    name: claude-to-figma-relay
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: node cloud-relay.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
