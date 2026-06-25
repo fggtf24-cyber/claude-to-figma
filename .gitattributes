@@ -1,0 +1,2 @@
+# shell-скрипты исполняются на Linux — всегда LF, иначе curl|bash ломается
+*.sh text eol=lf
