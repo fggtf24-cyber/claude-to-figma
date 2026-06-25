@@ -1,6 +1,6 @@
 {
-  "name": "Claude → Figma",
-  "id": "claude-to-figma-mcp",
+  "name": "HTML to Figma",
+  "id": "1651785454878799590",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",

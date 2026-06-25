@@ -34,31 +34,30 @@
 </style>
 </head>
 <body>
-  <h1>Claude → Figma</h1>
-  <div class="row"><span class="dot" id="dot"></span><span id="status">Подключаюсь…</span></div>
+  <h1>HTML to Figma</h1>
 
-  <div class="card">
-    <label>Подключить Claude — вставь это как Connector в claude.ai</label>
-    <div class="copyrow">
-      <input type="text" id="connurl" readonly value="…" />
-      <button class="copy" id="copy">Копировать</button>
-    </div>
-    <div class="hint">
-      claude.ai → Settings → Connectors → Add custom connector → вставь ссылку.
-      Затем в чате: «импортируй этот дизайн в Figma». Нужен Claude Pro/Max и открытый плагин.
-    </div>
-  </div>
-
-  <label>Или вставь HTML вручную</label>
+  <label>Вставь HTML/CSS и нажми «Импортировать» — получишь редактируемые слои</label>
   <textarea id="html" placeholder="<div style='padding:24px;background:#0d99ff;color:#fff'>Привет, Figma!</div>"></textarea>
   <div class="row" style="margin-top:6px">
     <label style="margin:0 6px 0 0">Ширина, px</label>
     <input type="number" id="width" value="1440" min="100" style="width:90px" />
   </div>
-  <button id="import">Импортировать HTML в Figma</button>
+  <button id="import">Импортировать в Figma</button>
 
-  <details>
-    <summary>Дополнительно</summary>
+  <details id="claudeBox">
+    <summary>Опционально: получать HTML из Claude</summary>
+    <div class="row" style="margin-top:8px"><span class="dot" id="dot"></span><span id="status">Подключаюсь…</span></div>
+    <div class="card">
+      <label>Вставь это как Connector в claude.ai (нужен свой аккаунт Claude)</label>
+      <div class="copyrow">
+        <input type="text" id="connurl" readonly value="…" />
+        <button class="copy" id="copy">Копировать</button>
+      </div>
+      <div class="hint">
+        claude.ai → Settings → Connectors → Add custom connector → вставь ссылку.
+        Затем в чате: «импортируй этот HTML в Figma». Опция выключена по умолчанию.
+      </div>
+    </div>
     <label>WebSocket-адрес (для своего сервера / локального моста)</label>
     <input type="text" id="wsurl" value="" />
     <button id="newcode" class="ghost">Сгенерировать новый код пары</button>
@@ -79,7 +78,7 @@ window.onmessage = (e) => {
     relayHost = m.relay; roomCode = m.code;
     document.getElementById("wsurl").value = "wss://" + m.relay + "/plugin?room=" + m.code;
     document.getElementById("connurl").value = "https://" + m.relay + "/" + m.code + "/mcp";
-    connect();
+    // не подключаемся автоматически — только когда юзер раскрывает блок Claude (см. ниже)
   } else if (m.type === "render-done") {
     const cb = figmaCallbacks[m.id];
     if (cb) { cb({ ok: m.ok, error: m.error, nodeCount: m.nodeCount }); delete figmaCallbacks[m.id]; }
@@ -88,6 +87,7 @@ window.onmessage = (e) => {
 
 /* =============================== WebSocket-мост =============================== */
 let ws = null;
+let wantConnection = false;
 function setStatus(text, on) {
   document.getElementById("status").textContent = text;
   document.getElementById("dot").classList.toggle("on", !!on);
@@ -95,11 +95,12 @@ function setStatus(text, on) {
 function connect() {
   const url = document.getElementById("wsurl").value.trim();
   if (!url) return;
-  try { ws && ws.close(); } catch (e) {}
+  wantConnection = true;
+  try { if (ws) { ws.onclose = null; ws.close(); } } catch (e) {}
   try { ws = new WebSocket(url); } catch (e) { setStatus("Неверный URL", false); return; }
-  ws.onopen = () => { setStatus("Подключено к " + url, true); ws.send(JSON.stringify({ role: "plugin" })); };
-  ws.onclose = () => { setStatus("Мост недоступен — переподключаюсь…", false); setTimeout(connect, 2500); };
-  ws.onerror = () => setStatus("Ошибка соединения с мостом", false);
+  ws.onopen = () => { setStatus("Подключено", true); ws.send(JSON.stringify({ role: "plugin" })); };
+  ws.onclose = () => { setStatus("Отключено", false); if (wantConnection) setTimeout(connect, 2500); };
+  ws.onerror = () => setStatus("Ошибка соединения", false);
   ws.onmessage = async (ev) => {
     let msg; try { msg = JSON.parse(ev.data); } catch (e) { return; }
     if (msg.type === "import-html") {
@@ -116,6 +117,12 @@ function connect() {
   };
 }
 document.getElementById("wsurl").addEventListener("change", connect);
+
+// сеть к relay включается только когда юзер раскрывает блок «получать из Claude»
+document.getElementById("claudeBox").addEventListener("toggle", (e) => {
+  if (e.target.open) connect();
+  else { wantConnection = false; try { if (ws) { ws.onclose = null; ws.close(); } } catch (err) {} }
+});
 
 document.getElementById("copy").addEventListener("click", async () => {
   const url = document.getElementById("connurl").value;

@@ -23,34 +23,24 @@
 
 ## Тексты для формы
 
-**Name:** Claude → Figma — HTML to editable layers
+**Name:** HTML to Figma
 
-**Tagline (короткое):**
-Импортируй HTML и дизайны из Claude в Figma как редактируемые слои.
-
-**Tagline (EN):**
-Turn HTML and Claude designs into editable Figma layers.
-
-**Описание (RU):**
-> Вставь HTML — получи нативные слои Figma: фреймы, текст, шейпы и вектора-иконки.
-> Геометрия берётся из реального layout браузера, поэтому раскладка пиксель-в-пиксель.
-> Поддерживаются артефакты Claude (sc-if / sc-for / шаблоны), flex-вёрстка,
-> скругления, обводки, изображения и SVG-иконки.
+**Description (финальная, согласована с ревьюером Figma — фокус на импорте, Claude ниже):**
+> Import HTML/CSS as editable Figma layers, including frames, text, shapes, and
+> vector icons. The plugin reads layout from the rendered page so imported results
+> stay close to the original structure and appearance. Use it to bring existing
+> markup, exported components, or generated HTML into Figma for manual editing.
+> Import runs locally in the plugin; network access is only used to load image URLs
+> referenced in your HTML.
 >
-> Режимы:
-> • Ручной — вставь HTML и нажми «Импортировать» (работает сразу, без настройки).
-> • Claude (опционально) — подключи свой аккаунт Claude по MCP и проси
->   «импортируй этот дизайн в Figma» прямо из чата.
-
-**Description (EN):**
-> Paste HTML and get native Figma layers — frames, text, shapes and vector icons.
-> Geometry comes from the real browser layout, so it's pixel-accurate. Supports
-> Claude design artifacts, flexbox, radii, strokes, images and inline SVG icons.
+> An optional Claude connection can send HTML from your own Claude setup to your
+> open plugin session; this is off by default, requires your own Claude account,
+> and uses a relay only to deliver the imported HTML.
 >
-> Modes:
-> • Manual — paste HTML, click Import (works instantly, no setup).
-> • Claude (optional) — connect your Claude account over MCP and ask it to import
->   designs straight from chat.
+> No analytics, tracking, or ads.
+> Privacy policy: https://github.com/fggtf24-cyber/claude-to-figma/blob/main/docs/PRIVACY.md
+> Support: https://github.com/fggtf24-cyber/claude-to-figma/issues
+> Source: https://github.com/fggtf24-cyber/claude-to-figma
 
 **Теги:** html, html to figma, import, code to design, claude, ai, layers, svg, design
 
