@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 960" font-family="Inter, Segoe UI, sans-serif">
   <rect width="1920" height="960" fill="#0b1020"/>
   <!-- left: text -->
-  <text x="140" y="380" fill="#fff" font-size="104" font-weight="800" letter-spacing="-2">Claude → Figma</text>
-  <text x="146" y="450" fill="#9aa4bf" font-size="40">HTML и дизайны из Claude — в редактируемые слои Figma</text>
+  <text x="140" y="380" fill="#fff" font-size="112" font-weight="800" letter-spacing="-2">HTML to Figma</text>
+  <text x="146" y="450" fill="#9aa4bf" font-size="40">Импортируй HTML/CSS в редактируемые слои Figma</text>
   <g fill="#4db5ff" font-size="30" font-weight="600">
     <text x="146" y="560">• фреймы · текст · шейпы · вектора-иконки</text>
-    <text x="146" y="610">• пиксель-в-пиксель из реального layout</text>
-    <text x="146" y="660">• вставь HTML или подключи Claude по MCP</text>
+    <text x="146" y="610">• геометрия из реального layout страницы</text>
+    <text x="146" y="660">• вставь HTML и получи слои</text>
   </g>
 
   <!-- right: flow motif -->
