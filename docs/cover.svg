@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 960" font-family="Inter, Segoe UI, sans-serif">
+  <rect width="1920" height="960" fill="#0b1020"/>
+  <!-- left: text -->
+  <text x="140" y="380" fill="#fff" font-size="104" font-weight="800" letter-spacing="-2">Claude → Figma</text>
+  <text x="146" y="450" fill="#9aa4bf" font-size="40">HTML и дизайны из Claude — в редактируемые слои Figma</text>
+  <g fill="#4db5ff" font-size="30" font-weight="600">
+    <text x="146" y="560">• фреймы · текст · шейпы · вектора-иконки</text>
+    <text x="146" y="610">• пиксель-в-пиксель из реального layout</text>
+    <text x="146" y="660">• вставь HTML или подключи Claude по MCP</text>
+  </g>
+
+  <!-- right: flow motif -->
+  <g transform="translate(1180,300)">
+    <rect x="0" y="40" width="240" height="300" rx="20" fill="#131a30" stroke="#2a3350"/>
+    <text x="120" y="200" fill="#6E7596" font-size="26" text-anchor="middle">&lt;html&gt;</text>
+
+    <path d="M270 190 H360" stroke="#4db5ff" stroke-width="8" stroke-linecap="round"/>
+    <path d="M348 176 L366 190 L348 204" fill="none" stroke="#4db5ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="400" y="40" width="300" height="300" rx="20" fill="#0d99ff"/>
+    <rect x="430" y="80" width="240" height="60" rx="10" fill="#ffffff" opacity="0.95"/>
+    <rect x="430" y="160" width="150" height="40" rx="8" fill="#dCEBFF" opacity="0.85"/>
+    <circle cx="640" cy="180" r="20" fill="#2347F5"/>
+    <rect x="430" y="230" width="240" height="70" rx="14" fill="#0b1020"/>
+    <text x="550" y="275" fill="#fff" font-size="26" text-anchor="middle" font-weight="600">Кнопка</text>
+  </g>
+</svg>
