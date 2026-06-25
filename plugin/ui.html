@@ -24,34 +24,49 @@
   }
   button:disabled { background: #b9d9f2; cursor: default; }
   .hint { font-size: 10px; color: #888; margin-top: 8px; line-height: 1.4; }
+  .card { border: 1px solid #e6e6e6; border-radius: 8px; padding: 10px; margin-bottom: 10px; background: #fafafa; }
+  .copyrow { display: flex; gap: 6px; align-items: stretch; }
+  .copyrow input { flex: 1; }
+  .copy { margin: 0; width: auto; padding: 0 12px; flex: none; }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; font-size: 11px; color: #555; }
+  .ghost { background: #eee; color: #333; }
 </style>
 </head>
 <body>
   <h1>Claude → Figma</h1>
-  <div class="row"><span class="dot" id="dot"></span><span id="status">Подключаюсь к мосту…</span></div>
+  <div class="row"><span class="dot" id="dot"></span><span id="status">Подключаюсь…</span></div>
 
-  <div class="controls">
-    <div>
-      <label>WebSocket-мост</label>
-      <input type="text" id="wsurl" value="ws://localhost:3055" />
+  <div class="card">
+    <label>Подключить Claude — вставь это как Connector в claude.ai</label>
+    <div class="copyrow">
+      <input type="text" id="connurl" readonly value="…" />
+      <button class="copy" id="copy">Копировать</button>
     </div>
-    <div style="flex:0 0 90px">
-      <label>Ширина, px</label>
-      <input type="number" id="width" value="1440" min="100" />
+    <div class="hint">
+      claude.ai → Settings → Connectors → Add custom connector → вставь ссылку.
+      Затем в чате: «импортируй этот дизайн в Figma». Нужен Claude Pro/Max и открытый плагин.
     </div>
   </div>
 
-  <label>Или вставь HTML вручную и нажми «Импортировать»</label>
+  <label>Или вставь HTML вручную</label>
   <textarea id="html" placeholder="<div style='padding:24px;background:#0d99ff;color:#fff'>Привет, Figma!</div>"></textarea>
-  <button id="import">Импортировать в Figma</button>
-
-  <div class="hint">
-    Через MCP: запусти сервер из папки <code>server</code> и попроси Claude
-    «импортируй этот HTML в Figma». Плагин должен быть открыт в Figma.
+  <div class="row" style="margin-top:6px">
+    <label style="margin:0 6px 0 0">Ширина, px</label>
+    <input type="number" id="width" value="1440" min="100" style="width:90px" />
   </div>
+  <button id="import">Импортировать HTML в Figma</button>
+
+  <details>
+    <summary>Дополнительно</summary>
+    <label>WebSocket-адрес (для своего сервера / локального моста)</label>
+    <input type="text" id="wsurl" value="" />
+    <button id="newcode" class="ghost">Сгенерировать новый код пары</button>
+  </details>
 
 <script>
 /* =============================== UI ↔ Figma =============================== */
+let relayHost = "", roomCode = "";
 const figmaCallbacks = {};
 function renderViaFigma(tree, name, id, cb) {
   if (cb) figmaCallbacks[id] = cb;
@@ -60,7 +75,12 @@ function renderViaFigma(tree, name, id, cb) {
 window.onmessage = (e) => {
   const m = e.data.pluginMessage;
   if (!m) return;
-  if (m.type === "render-done") {
+  if (m.type === "config") {
+    relayHost = m.relay; roomCode = m.code;
+    document.getElementById("wsurl").value = "wss://" + m.relay + "/plugin?room=" + m.code;
+    document.getElementById("connurl").value = "https://" + m.relay + "/" + m.code + "/mcp";
+    connect();
+  } else if (m.type === "render-done") {
     const cb = figmaCallbacks[m.id];
     if (cb) { cb({ ok: m.ok, error: m.error, nodeCount: m.nodeCount }); delete figmaCallbacks[m.id]; }
   }
@@ -74,6 +94,8 @@ function setStatus(text, on) {
 }
 function connect() {
   const url = document.getElementById("wsurl").value.trim();
+  if (!url) return;
+  try { ws && ws.close(); } catch (e) {}
   try { ws = new WebSocket(url); } catch (e) { setStatus("Неверный URL", false); return; }
   ws.onopen = () => { setStatus("Подключено к " + url, true); ws.send(JSON.stringify({ role: "plugin" })); };
   ws.onclose = () => { setStatus("Мост недоступен — переподключаюсь…", false); setTimeout(connect, 2500); };
@@ -93,8 +115,19 @@ function connect() {
     }
   };
 }
-document.getElementById("wsurl").addEventListener("change", () => { try { ws && ws.close(); } catch (e) {} connect(); });
-connect();
+document.getElementById("wsurl").addEventListener("change", connect);
+
+document.getElementById("copy").addEventListener("click", async () => {
+  const url = document.getElementById("connurl").value;
+  const btn = document.getElementById("copy");
+  try { await navigator.clipboard.writeText(url); }
+  catch (e) { const i = document.getElementById("connurl"); i.select(); document.execCommand("copy"); }
+  btn.textContent = "Готово ✓"; setTimeout(() => (btn.textContent = "Копировать"), 1500);
+});
+
+document.getElementById("newcode").addEventListener("click", () => {
+  parent.postMessage({ pluginMessage: { type: "newcode" } }, "*");
+});
 
 /* =============================== Ручной импорт =============================== */
 document.getElementById("import").addEventListener("click", async () => {

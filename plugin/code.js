@@ -8,7 +8,32 @@ let skipped = 0;
 let firstError = "";
 let substituted = new Set(); // шрифты, которых нет в системе → заменены на Inter
 
+// Облачный relay для опубликованного плагина. Плагин сам коннектится к нему,
+// а пользователю показывает готовый URL коннектора с его персональным кодом.
+const RELAY = "claude-to-figma.onrender.com";
+
+function genCode() {
+  let c = "";
+  for (let i = 0; i < 32; i++) c += Math.floor(Math.random() * 16).toString(16);
+  return c;
+}
+async function getRoomCode(forceNew) {
+  let code;
+  if (!forceNew) { try { code = await figma.clientStorage.getAsync("roomCode"); } catch (e) {} }
+  if (!code) { code = genCode(); try { await figma.clientStorage.setAsync("roomCode", code); } catch (e) {} }
+  return code;
+}
+async function sendConfig(forceNew) {
+  const code = await getRoomCode(forceNew);
+  figma.ui.postMessage({ type: "config", relay: RELAY, code });
+}
+sendConfig(false);
+
 figma.ui.onmessage = async (msg) => {
+  if (msg.type === "newcode") {
+    await sendConfig(true);
+    return;
+  }
   if (msg.type === "render") {
     skipped = 0;
     firstError = "";
