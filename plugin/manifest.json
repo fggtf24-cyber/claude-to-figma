@@ -8,6 +8,6 @@
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": ["*"],
-    "reasoning": "Подключение к локальному MCP-мосту (ws://localhost:3055) и загрузка изображений из импортируемого HTML."
+    "reasoning": "Loads images referenced in the imported HTML from arbitrary domains, and connects over WebSocket to the relay (claude-to-figma.onrender.com) to receive designs from Claude."
   }
 }
